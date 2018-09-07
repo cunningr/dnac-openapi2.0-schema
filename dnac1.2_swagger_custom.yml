@@ -1,0 +1,273 @@
+paths:
+  /api/v2/ippool:
+    post:
+      summary: Adds an IP pool to DNAC
+      description: Creates an IP Pool.
+      parameters:
+      - name: "ippool"
+        in: "body"
+        description: "IP pool object"
+        required: true
+        schema:
+          $ref: "#/definitions/Ippool"
+      responses:
+        200:
+          description: Create an IP Pool
+          schema:
+            type: object
+    get:
+      summary: Fetches a list of configured IP Pools
+      description: Fetches all IP Pools.
+      responses:
+        200:
+          description: Fetches all IP Pools.
+          schema:
+            type: object
+  /api/v2/ippool/{poolId}:
+    delete:
+      summary: Deletes an IP pool to DNAC
+      description: Deletes an IP Pool.
+      parameters:
+        - in: path
+          name: poolId
+          required: true
+          type: string
+          description: UID of IP Pool to delete
+      responses:
+        204:
+          description: IP Pool deleted
+          schema:
+            type: object
+  /api/v1/group:
+    get:
+      summary: Returns the Site groups
+      description: Returns the Site groups.
+      parameters:
+      - description: groupName (Optional)
+        in: query
+        name: groupName
+        required: false
+        type: string
+      - description: groupType (Optional)
+        in: query
+        name: groupType
+        required: false
+        type: string
+      - description: field (Optional)
+        in: query
+        name: field
+        required: false
+        type: string
+      responses:
+        '200':
+          description: The request was successful. The result is contained in the
+            response body.
+          schema:
+            $ref: '#/definitions/response'
+  /api/v1/group{groupId}:
+    delete:
+      summary: Deletes a group from DNAC
+      description: Deletes a group from DNAC
+      parameters:
+        - in: path
+          name: groupId
+          required: true
+          type: string
+          description: UID of group to delete
+      responses:
+        204:
+          description: Group deleted
+          schema:
+            type: object
+  /api/v1/group/count:
+    get:
+      summary: Returns the Site groups
+      description: Returns the Site groups.
+      parameters:
+      - description: groupName (Optional)
+        in: query
+        name: groupType
+        required: false
+        type: string
+      responses:
+        '200':
+          description: The request was successful. The result is contained in the
+            response body.
+          schema:
+            $ref: '#/definitions/response'
+  /api/system/v1/maglev/backup/remote/settings:
+    put:
+      summary: Updates Backup Server details
+      description: Updates the remote backup server details
+      parameters:
+      - name: "BackupRemote"
+        in: "body"
+        description: "Bacup Remote Detais"
+        required: true
+        schema:
+          $ref: "#/definitions/BackupRemote"
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+    get:
+      summary: Configured Backup Destination
+      description: Fetches the configured backup destination
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/BackupRemote"
+  /api/system/v1/maglev/backup:
+    post:
+      summary: Creates a new Backup Point
+      description: Initiates a new backup job
+      parameters:
+      - name: "Backup"
+        in: "body"
+        description: "Description of Backup point"
+        required: true
+        schema:
+          $ref: "#/definitions/Backup"
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+    get:
+      summary: Configured Backup Destination
+      description: Fetches the configured backup destination
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/BackupDetailResponse'
+  /api/system/v1/maglev/backup/progress:
+    get:
+      summary: Backup Progress
+      description: Fetches the backup progress
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+  /api/system/v1/maglev/backup/history:
+    get:
+      summary: Backup History
+      description: Fetches the backup history
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+  /api/system/v1/maglev/restore/{BackupId}:
+    post:
+      summary: Initiate Restore
+      description: Initiate Restore of given BackupId
+      parameters:
+        - in: path
+          name: BackupId
+          required: true
+          type: string
+          description: UUID of Backup to restore
+      responses:
+        200:
+          description: Returns a version and response Id
+          schema:
+            type: object
+  /api/system/v1/maglev/backup/{BackupId}:
+    delete:
+      summary: Delete a restore point
+      description: Delete the restore point with given BackupId
+      parameters:
+        - in: path
+          name: BackupId
+          required: true
+          type: string
+          description: UUID of Backup to restore
+      responses:
+        200:
+          description: Returns a version and response Id
+          schema:
+            type: object
+
+
+definitions:
+  Ippool:
+    type: object
+    required:
+      - ipPoolName
+      - ipPoolCidr
+      - gateways
+    properties:
+      ipPoolName:
+        type: string
+      ipPoolCidr:
+        type: string
+      gateways:
+        type: array
+        items:
+          type: string
+        minItems: 1
+      dhcpServerIps:
+        type: string
+      dnsServerIps:
+        type: string
+      overlapping:
+        type: string
+  response:
+    type: object
+  BackupRemote:
+    properties:
+      response:
+        items:
+          type: object
+          required:
+            - remote_server_ip
+            - remote_server_dir
+            - remote_server_port
+            - remote_server_passphrase
+            - remote_server_username
+            - remote_server_password
+          properties:
+            remote_server_ip:
+              type: string
+            remote_server_dir:
+              type: string
+            remote_server_port:
+              type: string
+            remote_server_passphrase:
+              type: string
+            remote_server_username:
+              type: string
+            remote_server_password:
+              type: string
+        type: array
+      version:
+        type: string
+    type: object
+  Backup:
+    properties:
+      response:
+        items:
+          required:
+            - description
+          properties:
+            description:
+              type: string
+          type: object
+        type: array
+      version:
+        type: string
+    type: object
+  BackupDetailResponse:
+    properties:
+      response:
+        items:
+          type: object
+        type: array
+      version:
+        type: string
+    type: object
+
