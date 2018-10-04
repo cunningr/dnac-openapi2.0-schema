@@ -40,8 +40,8 @@ schemaDict.update(securityDefinitions)
 schemaDict.update(apiSecurity)
 
 #Hack /api/system/v1/auth/token
-schemaDict['paths']['/api/system/v1/auth/token']['post'].pop('parameters', None)
-schemaDict['paths']['/api/system/v1/auth/token']['post'].update(basicSecurity)
+schemaDict['paths']['/dna/system/api/v1/auth/token']['post'].pop('parameters', None)
+schemaDict['paths']['/dna/system/api/v1/auth/token']['post'].update(basicSecurity)
 
 #Add custom definitions
 with open("dnac1.2_swagger_custom.yml", 'r') as stream:
