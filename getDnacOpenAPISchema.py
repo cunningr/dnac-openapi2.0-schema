@@ -4,7 +4,8 @@ import requests
 import oyaml as yaml
 import json
 
-schemaUrl = "https://pubhub.devnetcloud.com/media/dna-center-api-1-2/docs/swagger_apis_06052018.json"
+#schemaUrl = "https://pubhub.devnetcloud.com/media/dna-center-api-1-2/docs/swagger_apis_06052018.json"
+schemaUrl = "https://pubhub.devnetcloud.com/media/testdna-center-api-125/docs/swagger_dnacp_125_devnet.json"
 
 r = requests.get(schemaUrl)
 
